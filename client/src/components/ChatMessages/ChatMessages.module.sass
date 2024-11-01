@@ -1,0 +1,111 @@
+.chatWrapper
+  position: relative
+  width: 100%
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  overflow-y: scroll
+  
+.groupCreatedWrapper
+  margin-top: auto
+  margin-bottom: 15px
+  text-align: center
+  padding-top: 16px
+
+.createdGroupMessage
+  font-size: 18px
+  padding: 0 16px
+
+.youCreatedGroupMessage
+  color: var(--green-color)
+
+.anotherCreatedGroupMessage
+  color: var(--blue-color)
+
+.noMessagesWrapper
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+.noMessagesMessage
+  font-size: 18px
+  
+.messagesList
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+  padding: 0 16px 16px 16px
+  gap: 10px
+
+.messageItem
+  display: flex
+  flex-direction: column
+  gap: 5px
+
+.yourMessageItem
+  align-items: flex-end
+  align-self: flex-end
+  padding-left: 50px
+
+.anotherMessageItem
+  align-items: flex-start
+  padding-right: 50px
+
+.messageSender
+  font-size: 12px
+
+.messageSenderYou
+  color: var(--green-color)
+  padding-right: 8px
+
+.messageSenderAnother
+  color: var(--blue-color)
+  padding-left: 8px
+
+.messageItemTextWrapper
+  display: flex
+  gap: 5px
+
+.updateMessageButton,
+.deleteMessageButton
+  border: none
+  background-color: transparent
+
+.updateIcon,
+.deleteIcon
+  width: 15px
+  height: 15px
+
+.updateIcon
+  color: var(--blue-color)
+
+.deleteIcon
+  color: darkred
+
+.messageItemText
+  font-size: 16px
+  word-break: break-word
+  overflow-wrap: break-word
+  padding: 8px 12px
+  border-radius: 15px
+  color: white
+
+.yourMessageItemText
+  background-color: var(--green-color)
+
+.anotherMessageItemText
+  background-color: var(--blue-color)
+
+.sentDateMessage
+  font-size: 12px
+  color: var(--grey-color)
+
+.yourMessageDate
+  padding-right: 8px
+
+.anotherMessageDate
+  padding-left: 8px
+
+.editedText
+  font-size: 10px
