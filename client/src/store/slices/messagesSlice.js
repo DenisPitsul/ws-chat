@@ -35,8 +35,8 @@ const messagesSlice = createSlice({
       state.deleteGroupError = null;
       state.openedGroup = null;
     },
-    deletedGroupError: state => {
-      state.deleteGroupError = null;
+    deletedGroupError: (state, { payload }) => {
+      state.deleteGroupError = payload;
     },
     clearDeleteGroupError: state => {
       state.updateGroupError = null;
