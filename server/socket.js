@@ -15,6 +15,9 @@ const {
     GET_GROUP_MESSAGES,
     GET_GROUP_MESSAGES_SUCCESS,
     GET_GROUP_MESSAGES_ERROR,
+    GET_MORE_GROUP_MESSAGES,
+    GET_MORE_GROUP_MESSAGES_SUCCESS,
+    GET_MORE_GROUP_MESSAGES_ERROR,
     NEW_MESSAGE,
     NEW_MESSAGE_SUCCESS,
     NEW_MESSAGE_ERROR,
@@ -108,8 +111,8 @@ const initSocket = httpServer => {
         const groupMessages = await Message.find({ groupId })
           .populate({ path: 'userId', select: '_id username' })
           .limit(MESSAGES_LIMIT)
-          .lean()
-          .sort({ createdAt: -1 });
+          .sort({ createdAt: -1 })
+          .lean();
 
         const preparedGroupMessages = groupMessages.map(gm => {
           let preparedGm = { ...gm, user: gm.userId };
@@ -124,6 +127,33 @@ const initSocket = httpServer => {
       } catch (err) {
         socket.emit(GET_GROUP_MESSAGES_ERROR, {
           error: err.message ?? 'Error getting group messages',
+        });
+      }
+    });
+
+    socket.on(GET_MORE_GROUP_MESSAGES, async ({ groupId, lastMessageTime }) => {
+      const query = {};
+      if (lastMessageTime) {
+        query.createdAt = { $lt: new Date(lastMessageTime) };
+      }
+
+      try {
+        const groupMessages = await Message.find({ groupId, ...query })
+          .populate({ path: 'userId', select: '_id username' })
+          .limit(MESSAGES_LIMIT)
+          .sort({ createdAt: -1 })
+          .lean();
+
+        const preparedGroupMessages = groupMessages.map(gm => {
+          let preparedGm = { ...gm, user: gm.userId };
+          preparedGm = _.omit(preparedGm, ['userId']);
+          return preparedGm;
+        });
+
+        socket.emit(GET_MORE_GROUP_MESSAGES_SUCCESS, preparedGroupMessages);
+      } catch (err) {
+        socket.emit(GET_MORE_GROUP_MESSAGES_ERROR, {
+          error: err.message ?? 'Error getting more group messages',
         });
       }
     });

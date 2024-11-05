@@ -1,14 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { http } from '../../api';
-import { getGroupMessages } from '../../api/ws';
+import { createSlice } from '@reduxjs/toolkit';
+import CONSTANTS from '../../constants';
 
 const MESSAGES_SLICE_NAME = 'messages';
 
 const initialState = {
   openedGroup: null,
   messages: [],
-  isFetching: false,
-  getError: null,
+  hasMoreMessages: true,
+  isMessageAdded: false,
+  isMoreMessagesLoadedForNotScrollDown: false,
+  getMessagesError: null,
   updateGroupError: null,
   deleteGroupError: null,
   updateMessageError: null,
@@ -42,15 +43,35 @@ const messagesSlice = createSlice({
       state.updateGroupError = null;
     },
     getGroupMessagesSuccess: (state, { payload }) => {
-      state.getError = null;
+      state.isMoreMessagesLoadedForNotScrollDown = false;
+      state.hasMoreMessages = true;
+      state.getMessagesError = null;
       state.openedGroup = payload.group;
+      if (payload.length < CONSTANTS.MESSAGES_LIMIT) {
+        state.hasMoreMessages = false;
+      }
       state.messages = [];
       state.messages.push(...payload.messages.reverse());
     },
     getGroupMessagesError: (state, { payload }) => {
-      state.getError = payload;
+      state.getMessagesError = payload;
+    },
+    getMoreGroupMessagesSuccess: (state, { payload }) => {
+      state.isMoreMessagesLoadedForNotScrollDown = true;
+      state.getMessagesError = null;
+      if (payload.length < CONSTANTS.MESSAGES_LIMIT) {
+        state.hasMoreMessages = false;
+      }
+      state.messages = [...payload.reverse(), ...state.messages];
+    },
+    getMoreGroupMessagesError: (state, { payload }) => {
+      state.getMessagesError = payload;
+    },
+    clearGetMessagesError: state => {
+      state.getMessagesError = null;
     },
     newMessageSuccess: (state, { payload }) => {
+      state.isMoreMessagesLoadedForNotScrollDown = false;
       state.error = null;
       state.messages.push(payload);
     },
@@ -109,6 +130,9 @@ export const {
   newMessageError,
   getGroupMessagesSuccess,
   getGroupMessagesError,
+  getMoreGroupMessagesSuccess,
+  getMoreGroupMessagesError,
+  clearGetMessagesError,
   updatedMessageSuccess,
   updatedMessageError,
   clearUpdateMessageError,

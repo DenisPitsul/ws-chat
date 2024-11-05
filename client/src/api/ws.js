@@ -6,6 +6,8 @@ import {
   deletedMessageSuccess,
   getGroupMessagesError,
   getGroupMessagesSuccess,
+  getMoreGroupMessagesError,
+  getMoreGroupMessagesSuccess,
   newMessageError,
   newMessageSuccess,
   updatedGroupError,
@@ -34,6 +36,9 @@ const {
     GET_GROUP_MESSAGES,
     GET_GROUP_MESSAGES_SUCCESS,
     GET_GROUP_MESSAGES_ERROR,
+    GET_MORE_GROUP_MESSAGES,
+    GET_MORE_GROUP_MESSAGES_SUCCESS,
+    GET_MORE_GROUP_MESSAGES_ERROR,
     NEW_MESSAGE,
     NEW_MESSAGE_SUCCESS,
     NEW_MESSAGE_ERROR,
@@ -56,6 +61,9 @@ export const deleteGroup = groupId => socket.emit(DELETE_GROUP, groupId);
 
 export const getGroupMessages = groupId =>
   socket.emit(GET_GROUP_MESSAGES, groupId);
+
+export const getMoreGroupMessages = payload =>
+  socket.emit(GET_MORE_GROUP_MESSAGES, payload);
 
 export const sendMessage = payload => socket.emit(NEW_MESSAGE, payload);
 
@@ -91,6 +99,13 @@ export const bringStoreToSocket = store => {
   });
   socket.on(GET_GROUP_MESSAGES_ERROR, error => {
     store.dispatch(getGroupMessagesError(error));
+  });
+
+  socket.on(GET_MORE_GROUP_MESSAGES_SUCCESS, payload => {
+    store.dispatch(getMoreGroupMessagesSuccess(payload));
+  });
+  socket.on(GET_MORE_GROUP_MESSAGES_ERROR, error => {
+    store.dispatch(getMoreGroupMessagesError(error));
   });
 
   socket.on(NEW_MESSAGE_SUCCESS, payload => {
