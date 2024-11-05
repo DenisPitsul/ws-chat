@@ -1,5 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
+import CONSTANTS from '../constants';
 
 const axiosOptions = {
   baseURL: 'http://localhost:5001/api',
@@ -21,7 +22,11 @@ export const getUser = token =>
   });
 
 export const getGroups = payload => {
-  const query = queryString.stringify({ groupName: payload.groupName });
+  const query = queryString.stringify({
+    groupName: payload.groupName,
+    page: payload.page,
+    results: CONSTANTS.GROUPS_LIMIT,
+  });
   return apiInstance.get(`/groups?${query}`, {
     headers: {
       Authorization: `Bearer ${payload.token}`,

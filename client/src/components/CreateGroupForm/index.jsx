@@ -21,7 +21,9 @@ function CreateGroupForm ({ user, createError, setIsFormOpened }) {
 
   return (
     <>
-      <span className={errorMessageClassNames}>{createError}</span>
+      {createError && (
+        <span className={errorMessageClassNames}>{createError.error}</span>
+      )}
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {formikProps => (
           <Form className={styles.createGroupForm}>

@@ -6,6 +6,8 @@ const GROUPS_SLICE_NAME = 'groups';
 const initialState = {
   isFetching: false,
   groups: [],
+  page: 1,
+  totalPages: 0,
   groupNameFilter: '',
   getError: null,
   createError: null,
@@ -15,9 +17,7 @@ export const getGroupsThunk = createAsyncThunk(
   `${GROUPS_SLICE_NAME}/get`,
   async (payload, { rejectWithValue }) => {
     try {
-      const {
-        data: { data },
-      } = await http.getGroups(payload);
+      const { data } = await http.getGroups(payload);
       return data;
     } catch (err) {
       return rejectWithValue({ message: err.message });
@@ -62,7 +62,13 @@ const authSlice = createSlice({
       state.getError = null;
     });
     builder.addCase(getGroupsThunk.fulfilled, (state, { payload }) => {
-      state.groups = payload;
+      if (payload.page === 1) {
+        state.groups = payload.data;
+      } else {
+        state.groups.push(...payload.data);
+      }
+      state.totalPages = payload.totalPages;
+      state.page = payload.page;
       state.isFetching = false;
     });
     builder.addCase(getGroupsThunk.rejected, (state, { payload }) => {

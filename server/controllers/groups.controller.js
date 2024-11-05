@@ -1,7 +1,10 @@
 const { Group } = require('../models');
 
 module.exports.getAllGroups = async (req, res, next) => {
-  const { query } = req;
+  const {
+    pagination: { page, limit, skip },
+    query,
+  } = req;
 
   const where = {};
   if (query.groupName) {
@@ -9,10 +12,16 @@ module.exports.getAllGroups = async (req, res, next) => {
   }
 
   try {
-    const foundGroups = await Group.find(where).select('-updatedAt');
+    const totalGroups = await Group.countDocuments(where);
+    const totalPages = Math.ceil(totalGroups / limit);
 
-    res.status(200).send({ data: foundGroups });
+    const foundGroups = await Group.find(where)
+      .select('-updatedAt')
+      .limit(limit)
+      .skip(skip);
+
+    res.status(200).send({ page, totalPages, data: foundGroups });
   } catch (err) {
-    next();
+    next(err);
   }
 };
