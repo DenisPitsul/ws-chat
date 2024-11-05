@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
-import { clearAuthError, loginThunk } from '../../store/slices/authSlice';
 import { connect } from 'react-redux';
+import { clearAuthError, loginThunk } from '../../store/slices/authSlice';
 import styles from './LoginForm.module.sass';
 
 function LoginForm ({ authError, login, clearAuthError }) {

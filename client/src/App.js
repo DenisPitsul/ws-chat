@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import Loader from './components/Loader';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import BasePage from './pages/BasePage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -13,7 +14,6 @@ import {
   getUserThunk,
   setTokenToSessionStorage,
 } from './store/slices/authSlice';
-import { useEffect } from 'react';
 
 function App ({
   isAuthFetching,

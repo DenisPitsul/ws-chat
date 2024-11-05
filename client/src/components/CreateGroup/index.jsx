@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styles from './CreateGroup.module.sass';
 import CreateGroupForm from '../CreateGroupForm';
-import { connect } from 'react-redux';
 import { notify } from '../../utils/notification';
 import CONSTANTS from '../../constants';
 import { clearCreateGroupError } from '../../store/slices/groupsSlice';

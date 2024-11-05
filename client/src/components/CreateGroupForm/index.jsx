@@ -1,11 +1,9 @@
 import { Field, Form, Formik } from 'formik';
-import React, { useEffect } from 'react';
-import styles from './CreateGroupForm.module.sass';
+import React from 'react';
 import { connect } from 'react-redux';
+import styles from './CreateGroupForm.module.sass';
 import { ws } from '../../api';
 import { clearCreateGroupError } from '../../store/slices/groupsSlice';
-import CONSTANTS from '../../constants';
-import { notify } from '../../utils/notification';
 
 function CreateGroupForm ({ user, setIsFormOpened }) {
   const initialValues = {

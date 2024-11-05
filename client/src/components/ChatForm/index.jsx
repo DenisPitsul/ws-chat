@@ -1,8 +1,8 @@
 import { Field, Form, Formik } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import styles from './ChatForm.module.sass';
 import { ws } from '../../api';
-import { connect } from 'react-redux';
 import {
   clearUpdateMessageError,
   setIsUpdateForm,

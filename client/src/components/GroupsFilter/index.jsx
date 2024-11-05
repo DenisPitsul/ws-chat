@@ -1,7 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from './GroupsFilter.module.sass';
 import { setGroupNameFilter } from '../../store/slices/groupsSlice';
-import { connect } from 'react-redux';
 
 function GroupsFilter ({ groupNameFilter, updateGroupNameFilter }) {
   return (

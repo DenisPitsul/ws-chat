@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import classNames from 'classnames';
 import styles from './GroupsList.module.sass';
 import {
   clearGetGroupsError,
@@ -6,7 +7,6 @@ import {
 } from '../../store/slices/groupsSlice';
 import { connect } from 'react-redux';
 import { ws } from '../../api';
-import classNames from 'classnames';
 import CONSTANTS from '../../constants';
 import { notify } from '../../utils/notification';
 

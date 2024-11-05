@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from './ChatComponent.module.sass';
 import ChatTopBar from '../ChatTopBar';
 import ChatMessages from '../ChatMessages';
 import ChatFormComponent from '../ChatFormComponent';
-import { connect } from 'react-redux';
 
 function ChatComponent ({ openedGroup }) {
   return (

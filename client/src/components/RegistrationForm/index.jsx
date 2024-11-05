@@ -1,12 +1,12 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { USER_VALIDATION_SCHEMA } from '../../utils/validationSchemas';
 import {
   clearAuthError,
   registrationThunk,
 } from '../../store/slices/authSlice';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
 import styles from './RegistrationForm.module.sass';
 
 function RegistrationForm ({ authError, register, clearAuthError }) {

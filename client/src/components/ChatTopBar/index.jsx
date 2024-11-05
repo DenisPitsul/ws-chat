@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styles from './ChatTopBar.module.sass';
 import { FaEdit } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa6';
 import { MdDelete, MdCancel } from 'react-icons/md';
 import { connect } from 'react-redux';
 import { Field, Form, Formik } from 'formik';
+import styles from './ChatTopBar.module.sass';
 import { notify } from '../../utils/notification';
 import CONSTANTS from '../../constants';
 import {

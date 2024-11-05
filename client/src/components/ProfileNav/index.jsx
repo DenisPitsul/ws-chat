@@ -1,8 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from './ProfileNav.module.sass';
 import { Link } from 'react-router-dom';
 import { logOut } from '../../store/slices/authSlice';
-import { connect } from 'react-redux';
 
 function ProfileNav ({ user, logOut }) {
   return (

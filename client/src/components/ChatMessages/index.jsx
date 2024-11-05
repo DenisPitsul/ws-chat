@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import styles from './ChatMessages.module.sass';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
 import { formattedDate } from '../../utils/date';
 import CONSTANTS from '../../constants';
 import {
