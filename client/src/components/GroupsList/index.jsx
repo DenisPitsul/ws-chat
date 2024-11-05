@@ -1,23 +1,36 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import styles from './GroupsList.module.sass';
-import { getGroupsThunk } from '../../store/slices/groupsSlice';
+import {
+  clearGetGroupsError,
+  getGroupsThunk,
+} from '../../store/slices/groupsSlice';
 import { connect } from 'react-redux';
 import { ws } from '../../api';
 import classNames from 'classnames';
+import CONSTANTS from '../../constants';
+import { notify } from '../../utils/notification';
 
 function GroupsList ({
   token,
   groups,
   page,
   totalPages,
-  getError,
+  getGroupsError,
   isFetching,
   getGroups,
   groupNameFilter,
   openedGroup,
+  clearGetGroupsErrorFromStore,
 }) {
   const observer = useRef();
   const listRef = useRef(null);
+
+  useEffect(() => {
+    if (getGroupsError) {
+      notify(getGroupsError.error, CONSTANTS.STATUS.ERROR);
+      clearGetGroupsErrorFromStore();
+    }
+  }, [getGroupsError]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -74,8 +87,7 @@ function GroupsList ({
       {groups.length === 0 && (
         <div className={styles.noGroupsMessage}>No groups found</div>
       )}
-      {getError && <div className={styles.error}>{getError.message}</div>}
-      {!isFetching && !getError && groups.length !== 0 && (
+      {!isFetching && !getGroupsError && groups.length !== 0 && (
         <ul className={styles.groupsList} ref={listRef}>
           {groups.map(({ _id, name }, index) => (
             <li
@@ -96,7 +108,7 @@ function GroupsList ({
 const mapStateToProps = ({ groupsData, authData, messagesData }) => ({
   token: authData.token,
   groups: groupsData.groups,
-  getError: groupsData.getError,
+  getGroupsError: groupsData.getGroupsError,
   isFetching: groupsData.isFetching,
   page: groupsData.page,
   totalPages: groupsData.totalPages,
@@ -106,6 +118,7 @@ const mapStateToProps = ({ groupsData, authData, messagesData }) => ({
 
 const mapDispatchToProps = dispatch => ({
   getGroups: data => dispatch(getGroupsThunk(data)),
+  clearGetGroupsErrorFromStore: () => dispatch(clearGetGroupsError()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupsList);

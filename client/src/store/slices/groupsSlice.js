@@ -9,8 +9,8 @@ const initialState = {
   page: 1,
   totalPages: 0,
   groupNameFilter: '',
-  getError: null,
-  createError: null,
+  getGroupsError: null,
+  createGroupError: null,
 };
 
 export const getGroupsThunk = createAsyncThunk(
@@ -29,12 +29,18 @@ const authSlice = createSlice({
   name: GROUPS_SLICE_NAME,
   initialState,
   reducers: {
+    clearGetGroupsError: state => {
+      state.getGroupsError = null;
+    },
     createGroupSuccess: (state, { payload }) => {
       state.createError = null;
       state.groups.push(payload);
     },
     createGroupError: (state, { payload }) => {
-      state.createError = payload;
+      state.createGroupError = payload;
+    },
+    clearCreateGroupError: state => {
+      state.createGroupError = null;
     },
     setGroupNameFilter: (state, { payload }) => {
       state.groupNameFilter = payload;
@@ -81,8 +87,10 @@ const authSlice = createSlice({
 const { reducer, actions } = authSlice;
 
 export const {
+  clearGetGroupsError,
   createGroupSuccess,
   createGroupError,
+  clearCreateGroupError,
   setGroupNameFilter,
   updateOpenedGroupInList,
   deleteGroupFromList,

@@ -1,11 +1,13 @@
 import { Field, Form, Formik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './CreateGroupForm.module.sass';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { ws } from '../../api';
+import { clearCreateGroupError } from '../../store/slices/groupsSlice';
+import CONSTANTS from '../../constants';
+import { notify } from '../../utils/notification';
 
-function CreateGroupForm ({ user, createError, setIsFormOpened }) {
+function CreateGroupForm ({ user, setIsFormOpened }) {
   const initialValues = {
     name: '',
   };
@@ -15,52 +17,45 @@ function CreateGroupForm ({ user, createError, setIsFormOpened }) {
     setIsFormOpened(false);
   };
 
-  const errorMessageClassNames = classNames(styles.errorMessage, {
-    [styles.isErrorMessageVisible]: !!createError,
-  });
-
   return (
-    <>
-      {createError && (
-        <span className={errorMessageClassNames}>{createError.error}</span>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      {formikProps => (
+        <Form className={styles.createGroupForm}>
+          <Field
+            className={styles.input}
+            type='text'
+            name='name'
+            placeholder='Group name'
+          />
+          <div className={styles.buttonsContainer}>
+            <button
+              type='submit'
+              className={styles.submitBtn}
+              disabled={!formikProps.values.name.trim()}
+            >
+              Create
+            </button>
+            <button
+              className={styles.cancelBtn}
+              type='button'
+              onClick={() => setIsFormOpened(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </Form>
       )}
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {formikProps => (
-          <Form className={styles.createGroupForm}>
-            <Field
-              className={styles.input}
-              type='text'
-              name='name'
-              placeholder='Group name'
-            />
-            <div className={styles.buttonsContainer}>
-              <button
-                type='submit'
-                className={styles.submitBtn}
-                disabled={!formikProps.values.name.trim()}
-              >
-                Create
-              </button>
-              <button
-                className={styles.cancelBtn}
-                type='button'
-                onClick={() => setIsFormOpened(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </>
+    </Formik>
   );
 }
 
 const mapStateToProps = ({ groupsData, authData }) => ({
-  createError: groupsData.createError,
+  createGroupError: groupsData.createGroupError,
   user: authData.user,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  clearCreateGroupErrorFromStore: () => dispatch(clearCreateGroupError()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateGroupForm);

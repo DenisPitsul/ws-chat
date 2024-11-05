@@ -6,7 +6,7 @@ const groupSchema = new Schema(
   {
     name: {
       type: String,
-      match: /[a-zA-Z]/,
+      match: /^.*\S.*$/,
       required: true,
       unique: true,
     },
