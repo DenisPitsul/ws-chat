@@ -43,7 +43,8 @@ function App({
     } else {
       navigate("/login");
     }
-  }, [navigate, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <>
