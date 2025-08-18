@@ -1,4 +1,4 @@
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 import {
   deletedGroupError,
   deletedGroupSuccess,
@@ -14,13 +14,13 @@ import {
   updatedGroupSuccess,
   updatedMessageError,
   updatedMessageSuccess,
-} from '../store/slices/messagesSlice';
-import CONSTANTS from '../constants';
+} from "../store/slices/messagesSlice";
+import CONSTANTS from "../constants";
 import {
   createGroupError,
   createGroupSuccess,
   deleteGroupFromList,
-} from '../store/slices/groupsSlice';
+} from "../store/slices/groupsSlice";
 
 const {
   SOCKET_EVENTS: {
@@ -51,81 +51,81 @@ const {
   },
 } = CONSTANTS;
 
-const socket = io('ws://localhost:5001');
+const socket = io("https://ws-chat-mcql.onrender.com");
 
-export const createGroup = groupName => socket.emit(NEW_GROUP, groupName);
+export const createGroup = (groupName) => socket.emit(NEW_GROUP, groupName);
 
-export const updateGroup = group => socket.emit(UPDATE_GROUP, group);
+export const updateGroup = (group) => socket.emit(UPDATE_GROUP, group);
 
-export const deleteGroup = groupId => socket.emit(DELETE_GROUP, groupId);
+export const deleteGroup = (groupId) => socket.emit(DELETE_GROUP, groupId);
 
-export const getGroupMessages = groupId =>
+export const getGroupMessages = (groupId) =>
   socket.emit(GET_GROUP_MESSAGES, groupId);
 
-export const getMoreGroupMessages = payload =>
+export const getMoreGroupMessages = (payload) =>
   socket.emit(GET_MORE_GROUP_MESSAGES, payload);
 
-export const sendMessage = payload => socket.emit(NEW_MESSAGE, payload);
+export const sendMessage = (payload) => socket.emit(NEW_MESSAGE, payload);
 
-export const updateMessage = payload => socket.emit(UPDATE_MESSAGE, payload);
+export const updateMessage = (payload) => socket.emit(UPDATE_MESSAGE, payload);
 
-export const deleteMessage = payload => socket.emit(DELETE_MESSAGE, payload);
+export const deleteMessage = (payload) => socket.emit(DELETE_MESSAGE, payload);
 
-export const bringStoreToSocket = store => {
-  socket.on(NEW_GROUP_SUCCESS, payload => {
+export const bringStoreToSocket = (store) => {
+  socket.on(NEW_GROUP_SUCCESS, (payload) => {
     store.dispatch(createGroupSuccess(payload));
   });
-  socket.on(NEW_GROUP_ERROR, error => {
+  socket.on(NEW_GROUP_ERROR, (error) => {
     store.dispatch(createGroupError(error));
   });
 
-  socket.on(UPDATE_GROUP_SUCCESS, payload => {
+  socket.on(UPDATE_GROUP_SUCCESS, (payload) => {
     store.dispatch(updatedGroupSuccess(payload));
   });
-  socket.on(UPDATE_GROUP_ERROR, payload => {
+  socket.on(UPDATE_GROUP_ERROR, (payload) => {
     store.dispatch(updatedGroupError(payload));
   });
 
-  socket.on(DELETE_GROUP_SUCCESS, payload => {
+  socket.on(DELETE_GROUP_SUCCESS, (payload) => {
     store.dispatch(deletedGroupSuccess());
     store.dispatch(deleteGroupFromList(payload));
   });
-  socket.on(DELETE_GROUP_ERROR, payload => {
+  socket.on(DELETE_GROUP_ERROR, (payload) => {
     store.dispatch(deletedGroupError(payload));
   });
 
-  socket.on(GET_GROUP_MESSAGES_SUCCESS, payload => {
+  socket.on(GET_GROUP_MESSAGES_SUCCESS, (payload) => {
     store.dispatch(getGroupMessagesSuccess(payload));
   });
-  socket.on(GET_GROUP_MESSAGES_ERROR, error => {
+  socket.on(GET_GROUP_MESSAGES_ERROR, (error) => {
     store.dispatch(getGroupMessagesError(error));
   });
 
-  socket.on(GET_MORE_GROUP_MESSAGES_SUCCESS, payload => {
+  socket.on(GET_MORE_GROUP_MESSAGES_SUCCESS, (payload) => {
     store.dispatch(getMoreGroupMessagesSuccess(payload));
   });
-  socket.on(GET_MORE_GROUP_MESSAGES_ERROR, error => {
+  socket.on(GET_MORE_GROUP_MESSAGES_ERROR, (error) => {
     store.dispatch(getMoreGroupMessagesError(error));
   });
 
-  socket.on(NEW_MESSAGE_SUCCESS, payload => {
+  socket.on(NEW_MESSAGE_SUCCESS, (payload) => {
     store.dispatch(newMessageSuccess(payload));
   });
-  socket.on(NEW_MESSAGE_ERROR, error => {
+  socket.on(NEW_MESSAGE_ERROR, (error) => {
     store.dispatch(newMessageError(error));
   });
 
-  socket.on(UPDATE_MESSAGE_SUCCESS, payload => {
+  socket.on(UPDATE_MESSAGE_SUCCESS, (payload) => {
     store.dispatch(updatedMessageSuccess(payload));
   });
-  socket.on(UPDATE_MESSAGE_ERROR, error => {
+  socket.on(UPDATE_MESSAGE_ERROR, (error) => {
     store.dispatch(updatedMessageError(error));
   });
 
-  socket.on(DELETE_MESSAGE_SUCCESS, payload => {
+  socket.on(DELETE_MESSAGE_SUCCESS, (payload) => {
     store.dispatch(deletedMessageSuccess(payload));
   });
-  socket.on(DELETE_MESSAGE_ERROR, error => {
+  socket.on(DELETE_MESSAGE_ERROR, (error) => {
     store.dispatch(deletedMessageError(error));
   });
 };
