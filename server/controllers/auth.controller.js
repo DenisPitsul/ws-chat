@@ -1,10 +1,10 @@
-const createHttpError = require('http-errors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { User } = require('../models');
-const { secret } = require('../configs/authConfig.json');
+const createHttpError = require("http-errors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { User } = require("../models");
+const { secret } = require("../configs/authConfig");
 
-const generateAccessToken = id => {
+const generateAccessToken = (id) => {
   const payload = { id };
 
   return jwt.sign(payload, secret);
@@ -24,7 +24,7 @@ module.exports.registration = async (req, res, next) => {
     const createdUser = await User.create({ username, hashPassword });
 
     if (!createdUser) {
-      return next(createHttpError(400, 'Bad request'));
+      return next(createHttpError(400, "Bad request"));
     }
 
     const token = generateAccessToken(createdUser._id);
@@ -48,7 +48,7 @@ module.exports.login = async (req, res, next) => {
 
     const validPassword = bcrypt.compareSync(password, foundUser.hashPassword);
     if (!validPassword) {
-      return next(createHttpError(401, 'Incorrect password entered'));
+      return next(createHttpError(401, "Incorrect password entered"));
     }
 
     const token = generateAccessToken(foundUser._id);

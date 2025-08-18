@@ -1,6 +1,8 @@
-const http = require('http');
-const app = require('./app');
-const initSocket = require('./socket');
+const http = require("http");
+require("dotenv").config();
+
+const app = require("./app");
+const initSocket = require("./socket");
 
 const PORT = process.env.PORT ?? 5001;
 
