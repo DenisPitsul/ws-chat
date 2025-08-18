@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { FaEdit } from 'react-icons/fa';
-import { FaCheck } from 'react-icons/fa6';
-import { MdDelete, MdCancel } from 'react-icons/md';
-import { connect } from 'react-redux';
-import { Field, Form, Formik } from 'formik';
-import styles from './ChatTopBar.module.sass';
-import { notify } from '../../utils/notification';
-import CONSTANTS from '../../constants';
+import React, { useEffect, useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
+import { MdDelete, MdCancel } from "react-icons/md";
+import { connect } from "react-redux";
+import { Field, Form, Formik } from "formik";
+import styles from "./ChatTopBar.module.sass";
+import { notify } from "../../utils/notification";
+import CONSTANTS from "../../constants";
 import {
   clearDeleteGroupError,
   clearUpdateGroupError,
-} from '../../store/slices/messagesSlice';
-import { ws } from '../../api';
-import { updateOpenedGroupInList } from '../../store/slices/groupsSlice';
+} from "../../store/slices/messagesSlice";
+import { ws } from "../../api";
+import { updateOpenedGroupInList } from "../../store/slices/groupsSlice";
 
-function ChatTopBar ({
+function ChatTopBar({
   openedGroup,
   userId,
   updateGroupError,
@@ -45,7 +45,7 @@ function ChatTopBar ({
       groupId: openedGroup._id,
       groupName: openedGroup.name,
     });
-  }, [openedGroup]);
+  }, [openedGroup, updateOpenedGroupInListInStore]);
 
   const initialValues = {
     name: openedGroup.name,
@@ -60,24 +60,24 @@ function ChatTopBar ({
     <div className={styles.chatTopBar}>
       {isUpdateGroupOpened ? (
         <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-          {formikProps => {
+          {(formikProps) => {
             return (
               <Form className={styles.updateGroupForm}>
                 <Field
                   className={styles.groupNameInput}
-                  type='text'
-                  name='name'
-                  placeholder='Group name'
+                  type="text"
+                  name="name"
+                  placeholder="Group name"
                 />
                 <button
-                  type='submit'
+                  type="submit"
                   className={styles.submitUpdateGroupBtn}
                   disabled={!formikProps.values.name.trim()}
                 >
                   <FaCheck className={styles.submitIcon} />
                 </button>
                 <button
-                  type='submit'
+                  type="submit"
                   className={styles.cancelUpdateGroupBtn}
                   onClick={() => setIsUpdateGroupOpened(false)}
                 >
@@ -93,14 +93,14 @@ function ChatTopBar ({
           {userId === openedGroup.user._id && (
             <div className={styles.buttonsWrapper}>
               <button
-                type='button'
+                type="button"
                 className={styles.updateGroupButton}
                 onClick={() => setIsUpdateGroupOpened(true)}
               >
                 <FaEdit className={styles.updateIcon} />
               </button>
               <button
-                type='button'
+                type="button"
                 className={styles.deleteGroupButton}
                 onClick={() => ws.deleteGroup(openedGroup._id)}
               >
@@ -121,10 +121,10 @@ const mapStateToProps = ({ messagesData, authData }) => ({
   deleteGroupError: messagesData.deleteGroupError,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   clearUpdateGroupErrorFromStore: () => dispatch(clearUpdateGroupError()),
   clearDeleteGroupErrorFromStore: () => dispatch(clearDeleteGroupError()),
-  updateOpenedGroupInListInStore: data =>
+  updateOpenedGroupInListInStore: (data) =>
     dispatch(updateOpenedGroupInList(data)),
 });
 

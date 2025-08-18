@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import classNames from 'classnames';
-import styles from './GroupsList.module.sass';
+import React, { useCallback, useEffect, useRef } from "react";
+import classNames from "classnames";
+import styles from "./GroupsList.module.sass";
 import {
   clearGetGroupsError,
   getGroupsThunk,
-} from '../../store/slices/groupsSlice';
-import { connect } from 'react-redux';
-import { ws } from '../../api';
-import CONSTANTS from '../../constants';
-import { notify } from '../../utils/notification';
+} from "../../store/slices/groupsSlice";
+import { connect } from "react-redux";
+import { ws } from "../../api";
+import CONSTANTS from "../../constants";
+import { notify } from "../../utils/notification";
 
-function GroupsList ({
+function GroupsList({
   token,
   groups,
   page,
@@ -30,7 +30,7 @@ function GroupsList ({
       notify(getGroupsError.error, CONSTANTS.STATUS.ERROR);
       clearGetGroupsErrorFromStore();
     }
-  }, [getGroupsError]);
+  }, [clearGetGroupsErrorFromStore, getGroupsError]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -38,7 +38,7 @@ function GroupsList ({
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [groupNameFilter]);
+  }, [getGroups, groupNameFilter, token]);
 
   const loadMoreGroups = useCallback(() => {
     if (page < totalPages) {
@@ -55,12 +55,12 @@ function GroupsList ({
   }, [groups]);
 
   const lastGroupRef = useCallback(
-    node => {
+    (node) => {
       if (observer.current) {
         observer.current.disconnect();
       }
 
-      observer.current = new IntersectionObserver(entries => {
+      observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           loadMoreGroups();
         }
@@ -72,11 +72,11 @@ function GroupsList ({
     [loadMoreGroups]
   );
 
-  const chooseGroup = groupId => {
+  const chooseGroup = (groupId) => {
     ws.getGroupMessages(groupId);
   };
 
-  const groupItemClassNames = groupId => {
+  const groupItemClassNames = (groupId) => {
     return classNames(styles.groupItem, {
       [styles.activeGroupItem]: openedGroup?._id === groupId,
     });
@@ -116,8 +116,8 @@ const mapStateToProps = ({ groupsData, authData, messagesData }) => ({
   openedGroup: messagesData.openedGroup,
 });
 
-const mapDispatchToProps = dispatch => ({
-  getGroups: data => dispatch(getGroupsThunk(data)),
+const mapDispatchToProps = (dispatch) => ({
+  getGroups: (data) => dispatch(getGroupsThunk(data)),
   clearGetGroupsErrorFromStore: () => dispatch(clearGetGroupsError()),
 });
 

@@ -1,17 +1,17 @@
-import { Field, Form, Formik } from 'formik';
-import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import styles from './ChatForm.module.sass';
-import { ws } from '../../api';
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import styles from "./ChatForm.module.sass";
+import { ws } from "../../api";
 import {
   clearUpdateMessageError,
   setIsUpdateForm,
   setUpdateMessage,
-} from '../../store/slices/messagesSlice';
-import { notify } from '../../utils/notification';
-import CONSTANTS from '../../constants';
+} from "../../store/slices/messagesSlice";
+import { notify } from "../../utils/notification";
+import CONSTANTS from "../../constants";
 
-function ChatForm ({
+function ChatForm({
   user,
   openedGroup,
   updateMessageError,
@@ -28,16 +28,16 @@ function ChatForm ({
       notify(updateMessageError.error, CONSTANTS.STATUS.ERROR);
       clearUpdateMessageErrorFromStore();
     }
-  }, [updateMessageError]);
+  }, [clearUpdateMessageErrorFromStore, updateMessageError]);
 
   const initialValues = {
-    body: '',
+    body: "",
   };
 
   const cancelUpdateForm = () => {
     closeUpdateForm();
     clearUpdateMessage();
-    formikRef.current.setFieldValue('body', '');
+    formikRef.current.setFieldValue("body", "");
   };
 
   const handleSubmit = (values, formikBag) => {
@@ -61,9 +61,9 @@ function ChatForm ({
   useEffect(() => {
     if (formikRef.current) {
       if (updateMessage) {
-        formikRef.current.setFieldValue('body', updateMessage.body);
+        formikRef.current.setFieldValue("body", updateMessage.body);
       } else {
-        formikRef.current.setFieldValue('body', '');
+        formikRef.current.setFieldValue("body", "");
       }
     }
   }, [updateMessage]);
@@ -74,20 +74,20 @@ function ChatForm ({
       initialValues={initialValues}
       onSubmit={handleSubmit}
     >
-      {formikProps => (
+      {(formikProps) => (
         <Form className={styles.chatForm}>
-          <Field className={styles.chatInput} name='body' />
+          <Field className={styles.chatInput} name="body" />
           <button
             className={styles.chatSubmitBtn}
-            type='submit'
+            type="submit"
             disabled={!formikProps.values.body.trim()}
           >
-            {isUpdateForm ? 'Update' : 'Send'}
+            {isUpdateForm ? "Update" : "Send"}
           </button>
           {isUpdateForm && (
             <button
               className={styles.cancelBtn}
-              type='button'
+              type="button"
               onClick={cancelUpdateForm}
             >
               Cancel
@@ -107,7 +107,7 @@ const mapStateToProps = ({ authData, messagesData }) => ({
   updateMessage: messagesData.updateMessage,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   clearUpdateMessageErrorFromStore: () => dispatch(clearUpdateMessageError()),
   closeUpdateForm: () => dispatch(setIsUpdateForm(false)),
   clearUpdateMessage: () => dispatch(setUpdateMessage(null)),

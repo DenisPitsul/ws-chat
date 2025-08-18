@@ -1,24 +1,24 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { USER_VALIDATION_SCHEMA } from '../../utils/validationSchemas';
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import classNames from "classnames";
+import { USER_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
 import {
   clearAuthError,
   registrationThunk,
-} from '../../store/slices/authSlice';
-import styles from './RegistrationForm.module.sass';
+} from "../../store/slices/authSlice";
+import styles from "./RegistrationForm.module.sass";
 
-function RegistrationForm ({ authError, register, clearAuthError }) {
+function RegistrationForm({ authError, register, clearAuthError }) {
   useEffect(() => {
     return () => {
       clearAuthError();
     };
-  }, []);
+  }, [clearAuthError]);
 
   const initialValues = {
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   };
 
   const handleSubmit = (values, formikBag) => {
@@ -32,8 +32,8 @@ function RegistrationForm ({ authError, register, clearAuthError }) {
       onSubmit={handleSubmit}
       validationSchema={USER_VALIDATION_SCHEMA}
     >
-      {formikProps => {
-        const getInputClassNames = field => {
+      {(formikProps) => {
+        const getInputClassNames = (field) => {
           return classNames(styles.input, {
             [styles.valid]:
               !formikProps.errors[field] && formikProps.touched[field],
@@ -42,8 +42,8 @@ function RegistrationForm ({ authError, register, clearAuthError }) {
           });
         };
 
-        const usernameClassNames = getInputClassNames('username');
-        const passwordClassNames = getInputClassNames('password');
+        const usernameClassNames = getInputClassNames("username");
+        const passwordClassNames = getInputClassNames("password");
 
         return (
           <Form className={styles.form}>
@@ -51,29 +51,29 @@ function RegistrationForm ({ authError, register, clearAuthError }) {
               <span className={styles.inputCaption}>Username:</span>
               <Field
                 className={usernameClassNames}
-                type='text'
-                name='username'
-                placeholder='Username'
+                type="text"
+                name="username"
+                placeholder="Username"
                 autoFocus
               />
               <ErrorMessage
                 className={styles.error}
-                name='username'
-                component='span'
+                name="username"
+                component="span"
               />
             </label>
             <label className={styles.inputLabel}>
               <span className={styles.inputCaption}>Password:</span>
               <Field
                 className={passwordClassNames}
-                type='password'
-                name='password'
-                placeholder='Password'
+                type="password"
+                name="password"
+                placeholder="Password"
               />
               <ErrorMessage
                 className={styles.error}
-                name='password'
-                component='span'
+                name="password"
+                component="span"
               />
             </label>
             {authError && (
@@ -81,7 +81,7 @@ function RegistrationForm ({ authError, register, clearAuthError }) {
                 {authError.errors[0].title}
               </span>
             )}
-            <button className={styles.submitBtn} type='submit'>
+            <button className={styles.submitBtn} type="submit">
               Register
             </button>
           </Form>
@@ -95,8 +95,8 @@ const mapStateToProps = ({ authData }) => ({
   authError: authData.authError,
 });
 
-const mapDispatchToProps = dispatch => ({
-  register: values => dispatch(registrationThunk(values)),
+const mapDispatchToProps = (dispatch) => ({
+  register: (values) => dispatch(registrationThunk(values)),
   clearAuthError: () => dispatch(clearAuthError()),
 });
 

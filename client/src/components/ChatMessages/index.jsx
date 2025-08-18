@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { FaEdit } from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
-import styles from './ChatMessages.module.sass';
-import { formattedDate } from '../../utils/date';
-import CONSTANTS from '../../constants';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { connect } from "react-redux";
+import classNames from "classnames";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import styles from "./ChatMessages.module.sass";
+import { formattedDate } from "../../utils/date";
+import CONSTANTS from "../../constants";
 import {
   clearDeleteMessageError,
   clearGetMessagesError,
   setIsUpdateForm,
   setUpdateMessage,
-} from '../../store/slices/messagesSlice';
-import { ws } from '../../api';
-import { notify } from '../../utils/notification';
+} from "../../store/slices/messagesSlice";
+import { ws } from "../../api";
+import { notify } from "../../utils/notification";
 
-function ChatMessages ({
+function ChatMessages({
   messages,
   hasMoreMessages,
   isMoreMessagesLoadedForNotScrollDown,
@@ -37,14 +37,14 @@ function ChatMessages ({
       notify(deleteMessageError.error, CONSTANTS.STATUS.ERROR);
       clearDeleteMessageErrorFromStore();
     }
-  }, [deleteMessageError]);
+  }, [clearDeleteMessageErrorFromStore, deleteMessageError]);
 
   useEffect(() => {
     if (getMessagesError) {
       notify(getMessagesError.error, CONSTANTS.STATUS.ERROR);
       clearGetMessagesErrorInStore();
     }
-  }, [getMessagesError]);
+  }, [clearGetMessagesErrorInStore, getMessagesError]);
 
   useLayoutEffect(() => {
     if (!isMoreMessagesLoadedForNotScrollDown) {
@@ -52,7 +52,7 @@ function ChatMessages ({
         top: chatWrapperRef.current.scrollHeight,
       });
     }
-  }, [messages.length]);
+  }, [isMoreMessagesLoadedForNotScrollDown, messages.length]);
 
   const loadMoreMessages = useCallback(() => {
     if (hasMoreMessages) {
@@ -62,12 +62,12 @@ function ChatMessages ({
   }, [hasMoreMessages, messages]);
 
   const lastMessageRef = useCallback(
-    node => {
+    (node) => {
       if (observer.current) {
         observer.current.disconnect();
       }
 
-      observer.current = new IntersectionObserver(entries => {
+      observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
           loadMoreMessages();
         }
@@ -84,40 +84,40 @@ function ChatMessages ({
     [styles.anotherCreatedGroupMessage]: authUserId !== openedGroup.user._id,
   });
 
-  const messageItemClassNames = userSentId => {
+  const messageItemClassNames = (userSentId) => {
     return classNames(styles.messageItem, {
       [styles.yourMessageItem]: userSentId === authUserId,
       [styles.anotherMessageItem]: userSentId !== authUserId,
     });
   };
 
-  const messageSenderClassNames = userSentId => {
+  const messageSenderClassNames = (userSentId) => {
     return classNames(styles.messageSender, {
       [styles.messageSenderYou]: userSentId === authUserId,
       [styles.messageSenderAnother]: userSentId !== authUserId,
     });
   };
 
-  const messageTextClassNames = userSentId => {
+  const messageTextClassNames = (userSentId) => {
     return classNames(styles.messageItemText, {
       [styles.yourMessageItemText]: userSentId === authUserId,
       [styles.anotherMessageItemText]: userSentId !== authUserId,
     });
   };
 
-  const messageDateClassNames = userSentId => {
+  const messageDateClassNames = (userSentId) => {
     return classNames(styles.sentDateMessage, {
       [styles.yourMessageDate]: userSentId === authUserId,
       [styles.anotherMessageDate]: userSentId !== authUserId,
     });
   };
 
-  const updateMessageBtnClicked = message => {
+  const updateMessageBtnClicked = (message) => {
     setUpdateForm(true);
     setUpdateMessageInStore(message);
   };
 
-  const deleteMessageBtnClicked = message => {
+  const deleteMessageBtnClicked = (message) => {
     if (updateMessage?._id === message.messageId) {
       setUpdateForm(false);
       setUpdateMessageInStore(null);
@@ -130,8 +130,8 @@ function ChatMessages ({
       <div className={styles.groupCreatedWrapper}>
         <span className={groupCreatorClassNames}>
           {authUserId === openedGroup.user._id
-            ? 'You'
-            : openedGroup.user.username}{' '}
+            ? "You"
+            : openedGroup.user.username}{" "}
           created group at {formattedDate(openedGroup.createdAt)}
         </span>
       </div>
@@ -160,13 +160,13 @@ function ChatMessages ({
                 ref={index === 0 ? lastMessageRef : null}
               >
                 <span className={messageSenderClassNames(userSentId)}>
-                  {userSentId === authUserId ? 'You' : username}
+                  {userSentId === authUserId ? "You" : username}
                 </span>
                 <div className={styles.messageItemTextWrapper}>
                   {userSentId === authUserId && (
                     <>
                       <button
-                        type='button'
+                        type="button"
                         className={styles.updateMessageButton}
                         onClick={() =>
                           updateMessageBtnClicked({
@@ -179,7 +179,7 @@ function ChatMessages ({
                         <FaEdit className={styles.updateIcon} />
                       </button>
                       <button
-                        type='button'
+                        type="button"
                         className={styles.deleteMessageButton}
                         onClick={() =>
                           deleteMessageBtnClicked({
@@ -224,10 +224,10 @@ const mapStateToProps = ({ authData, messagesData }) => ({
   updateMessage: messagesData.updateMessage,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   clearDeleteMessageErrorFromStore: () => dispatch(clearDeleteMessageError()),
-  setUpdateForm: flag => dispatch(setIsUpdateForm(flag)),
-  setUpdateMessageInStore: message => dispatch(setUpdateMessage(message)),
+  setUpdateForm: (flag) => dispatch(setIsUpdateForm(flag)),
+  setUpdateMessageInStore: (message) => dispatch(setUpdateMessage(message)),
   clearGetMessagesErrorInStore: () => dispatch(clearGetMessagesError()),
   clearUpdateMessage: () => dispatch(setUpdateMessage(null)),
 });
