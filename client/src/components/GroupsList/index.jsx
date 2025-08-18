@@ -52,7 +52,7 @@ function GroupsList({
         }
       );
     }
-  }, [groups]);
+  }, [getGroups, groupNameFilter, page, token, totalPages]);
 
   const lastGroupRef = useCallback(
     (node) => {

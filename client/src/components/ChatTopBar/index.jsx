@@ -30,14 +30,14 @@ function ChatTopBar({
       notify(updateGroupError.error, CONSTANTS.STATUS.ERROR);
       clearUpdateGroupErrorFromStore();
     }
-  }, [updateGroupError]);
+  }, [clearUpdateGroupErrorFromStore, updateGroupError]);
 
   useEffect(() => {
     if (deleteGroupError) {
       notify(deleteGroupError.error, CONSTANTS.STATUS.ERROR);
       clearDeleteGroupErrorFromStore();
     }
-  }, [updateGroupError]);
+  }, [clearDeleteGroupErrorFromStore, deleteGroupError, updateGroupError]);
 
   useEffect(() => {
     setIsUpdateGroupOpened(false);

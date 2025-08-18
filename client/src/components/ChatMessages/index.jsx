@@ -59,7 +59,7 @@ function ChatMessages({
       const lastMessageTime = messages.length ? messages[0].createdAt : null;
       ws.getMoreGroupMessages({ groupId: openedGroup._id, lastMessageTime });
     }
-  }, [hasMoreMessages, messages]);
+  }, [hasMoreMessages, messages, openedGroup._id]);
 
   const lastMessageRef = useCallback(
     (node) => {
